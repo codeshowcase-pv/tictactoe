@@ -18,6 +18,11 @@ class TicTacToe
       [0, 4, 8],
       [2, 4, 6],
     ]
+    @displayed_characters = {
+      '0' => '.',
+      '1' => 'X',
+      '2' => 'O'
+    }
   end
 
   def make_step(row, column, value)
@@ -38,10 +43,45 @@ class TicTacToe
 
     cell_check_result.uniq.length == 2 || @board.index(0).nil?
   end
+
+  def display_board
+    (0..2).each do |row|
+      row_string = ''
+      (0..2).each do |column|
+        row_string += @displayed_characters[board[(row * 3) + column].to_s]
+      end
+      puts row_string
+    end
+  end
+
+  def run
+    until is_final
+      display_board
+      p "team #{@displayed_characters[@current_player.to_s]}"
+      inputed_data = gets.chomp
+
+      if validate_input inputed_data
+        row = inputed_data[0].to_i
+        column = inputed_data[1].to_i
+        make_step(row, column, @current_player)
+
+        @current_player = @current_player + 1 > 2 ? 1 : 2
+      else
+        p 'bad input, XX (11), X - row(0,1,2) , X - column(0,1,2)'
+      end
+    end
+
+    display_board
+    p 'Game over'
+  end
+
+  def validate_input (inputed)
+    inputed.length == 2 && inputed[0].ord.between?(48,50) && inputed[1].ord.between?(48,50)
+  end
+
 end
 
 game = TicTacToe.new
-p game.board
 
-p game.is_final
-game
+game.run
+
