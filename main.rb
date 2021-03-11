@@ -1,28 +1,34 @@
-class TicTacToe
+# frozen_string_literal: true
 
+class TicTacToe
   attr_reader :board
 
   def initialize
     @board = [0] * 9
     @current_player = 1
-    @cells_sets_in_final_states = [
-      # горизонтали
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7 ,8],
-      # вертикали
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5 ,8],
-      # диагонали
-      [0, 4, 8],
-      [2, 4, 6],
-    ]
+    # rubocop:disable Style/StringHashKeys
     @displayed_characters = {
       '0' => '.',
       '1' => 'X',
       '2' => 'O'
     }
+    # rubocop:enable Style/StringHashKeys
+  end
+
+  def final_cells
+    [
+      # горизонтали
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      # вертикали
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      # диагонали
+      [0, 4, 8],
+      [2, 4, 6]
+    ]
   end
 
   def make_step(row, column, value)
@@ -30,10 +36,10 @@ class TicTacToe
   end
 
   # метод определяет завершена ли игра
-  def is_final
+  def final?
     # прохождение по массиву сетов с индексами ячеек
-    cell_check_result = @cells_sets_in_final_states.map do |cells_set|
-      #извлечение массивов со значениями контрольных ячеек с доски
+    cell_check_result = final_cells.map do |cells_set|
+      # извлечение массивов со значениями контрольных ячеек с доски
       cells_values = [@board[cells_set[0]], @board[cells_set[1]], @board[cells_set[2]]]
 
       # возвращение массива с true\false , где true указывает на равенство всех трёх контрольных ячеек, не равных 0
@@ -55,7 +61,7 @@ class TicTacToe
   end
 
   def run
-    until is_final
+    until final?
       display_board
       p "team #{@displayed_characters[@current_player.to_s]}"
       inputed_data = gets.chomp
@@ -75,13 +81,11 @@ class TicTacToe
     p 'Game over'
   end
 
-  def validate_input (inputed)
-    inputed.length == 2 && inputed[0].ord.between?(48,50) && inputed[1].ord.between?(48,50)
+  def validate_input(inputed)
+    inputed.length == 2 && inputed[0].ord.between?(48, 50) && inputed[1].ord.between?(48, 50)
   end
-
 end
 
 game = TicTacToe.new
 
 game.run
-
