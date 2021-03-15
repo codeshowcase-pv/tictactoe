@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Render
 
   def initialize(board)
     @board = board
-    @board_symbols = {
+    @symbols = {
       nil => '_',
       1   => 'X',
       2   => 'O'
@@ -16,7 +18,7 @@ class Render
   def board
     @board.game_field.each do |row|
       render_row = ''
-      row.each { |symbol_code| render_row += "#{@board_symbols[symbol_code]} " }
+      row.each { |symbol_code| render_row += "#{@symbols[symbol_code]} " }
       puts render_row
     end
   end
