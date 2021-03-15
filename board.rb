@@ -6,8 +6,8 @@ class Board
   end
 
   def set_cell(x, y, value) # rubocop:disable Naming/MethodParameterName
-    return false unless @game_field[x][y].nil?
+    return false unless @game_field[y][x].nil?
 
-    @game_field[x][y] = value
+    @game_field[y][x] = value
   end
 end
