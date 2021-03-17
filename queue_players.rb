@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class QueuePlayers
   def initialize(players)
     @active_player_index = 0
-    @players = players
+    @players             = players.shuffle
   end
 
   def active_player
@@ -9,6 +11,7 @@ class QueuePlayers
   end
 
   def set_next_player_active
-    @active_player_index = @active_player_index + 1 > @players.count - 1 ? 0 : 1
+    next_index           = @active_player_index + 1
+    @active_player_index = next_index == @players.count ? 0 : next_index
   end
 end

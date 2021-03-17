@@ -1,33 +1,40 @@
 # frozen_string_literal: true
 
-require './board'
-require './render'
-require './input'
-require './player'
-require './queue_players'
+require './library'
 
 class Game
   def initialize
-    @board = Board.new
-    @render = Render.new @board
+    @board  = Board.new
+    @render = Render.new(@board)
 
-    player_a = Player.new(1, 'X')
-    player_b = Player.new(2, '0')
+    player_a = Player.new('X', 'X')
+    player_b = Player.new('0', '0')
 
     @queue_players = QueuePlayers.new([player_a, player_b])
 
-    p 'Game created'
+    puts 'Game created'
   end
 
   def run
     loop do
       @render.clear
-      @render.board
-      input = Input.new
+      @render.print_errors
+      @render.print_board
+      @render.clear_errors
 
-      @active_player_value = @queue_players.active_player.value
+      begin
+        input = Input.new
+      rescue InvalidInput => e
+        @render.errors << e.message
+        next
+      end
 
-      @board.set_cell(input.x, input.y, @active_player_value) if input.x && input.y
+      @active_player_move_mark = @queue_players.active_player.move_mark
+
+      unless @board.set_cell(input.x, input.y, @active_player_move_mark)
+        @render.errors << 'Эта клетка уже занята'
+        next
+      end
 
       @queue_players.set_next_player_active
     end

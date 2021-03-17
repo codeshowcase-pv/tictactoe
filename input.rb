@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class Input
   attr_reader :x, :y
 
   def initialize
     get
-    return unless valid?
+
+    raise InvalidInput, @input unless valid?
 
     @x, @y = transform
   end
